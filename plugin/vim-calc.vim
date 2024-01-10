@@ -17,6 +17,5 @@ let s:vimcalc_deps_loc =  expand("<sfile>:h:r") . "/../lua/vim-calc/deps"
 exe "lua package.path = package.path .. ';" . s:vimcalc_deps_loc . "/lua-?/init.lua'"
 
 " Exposes the plugin's functions for use as commands in Neovim.
-command! -nargs=0 GetSelectedText lua require("vim-calc").GetSelectedText()
-command! -nargs=0 Calc lua require("vim-calc").Calc()
+command! -nargs=0 CalcSelectedText lua require("vim-calc").CalcSelectedText()
 
