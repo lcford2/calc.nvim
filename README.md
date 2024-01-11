@@ -13,22 +13,21 @@ with their result!
 ![Demo](demo.gif)
 
 
-#### Usage - NOTREADY
-Do **`:call Calc()`** inside vim to calculate the math equation in the current line (`vim-calc` will tell you if there's any error in terms of the equation within the current line)
+#### Usage
 
-Or, if you want a key-binding, add this to your `vimrc`/`init.vim`:
+To bind to a key, add this to your `nvim` configuration:
 
-```vim
-nnoremap <LEADER>a :call Calc()<CR>
+```lua
+vim.keymap.set("v", "<C-c>", "<cmd>Calculate<cr>", {})
 ```
 
-Now, you can press `LEADER` and `a` to calculate!
+Now, you can press `Control` and `c` to calculate!
 
-#### Installation - NOTREADY
-Install `vim-calc` with [Lazy](https://github.com/folke/lazy.nvim):
+#### Installation
+Install `vimcalc` with [Lazy](https://github.com/folke/lazy.nvim):
 ```lua
 require("lazy").setup({
-    "lcford2/vim-calc",
+    "lcford2/vimcalc",
 })
 ```
 
