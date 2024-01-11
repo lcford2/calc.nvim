@@ -1,8 +1,8 @@
 ## calc.nvim: A Calculator in NeoVim
 
-Inspired by (vim-calc)[https://github.com/theniceboy/vim-calc].
+Inspired by [vim-calc](https://github.com/theniceboy/vim-calc).
 
-Uses (asteval)[https://newville.github.io/asteval/] to perform *safe-ish* 
+Uses [asteval](https://newville.github.io/asteval/) to perform *safe-ish* 
 expression evaluations and replaces the expression right in your buffer!
 
 
