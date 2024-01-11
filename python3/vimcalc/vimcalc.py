@@ -3,6 +3,13 @@ from datetime import datetime
 from asteval import Interpreter
 
 def get_timestamp(dt=None):
+    """Get the isoformatted timestamp
+
+    If dt is not provided, will return the current time.
+
+    Args:
+        dt (datetime, optional): A datetime to convert to isoformat
+    """
     if dt:
         return datetime.isoformat(dt)
     else:
@@ -61,7 +68,7 @@ def replace_buffer_range(start, stop, replacement):
     feedkeys = vim.eval("nvim_replace_termcodes('<esc>', v:true, v:false, v:true)")
     vim.eval(rf"nvim_feedkeys('{feedkeys}', 'x', v:false)")
 
-def print_with_python():
+def calculate():
     start, stop = get_selected_range()
     text = get_text_from_range(start, stop)
     log("debug", f"Selected text: {text}")

@@ -18,4 +18,4 @@ endif
 
 python3 import vimcalc.vimcalc
 
-command! PrintWithPython python3 vimcalc.vimcalc.print_with_python()
+command! Calculate python3 vimcalc.vimcalc.calculate()
