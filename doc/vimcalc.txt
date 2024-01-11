@@ -1,0 +1,9 @@
+A plugin to evaluate mathematical expressions selected in visual mode and replace them 
+with the result.
+
+Examples:
+5 + 4 - 9 -> 0.0
+10 * 4 / 2 ** 3 -> 5.0
+sin(1) * 10 -> 8.415
+abs(-5) + 4 -> 9.0
+sqrt(4) / 3 -> 0.6667

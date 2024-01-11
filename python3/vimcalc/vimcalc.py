@@ -1,5 +1,17 @@
 import vim
+from datetime import datetime
 from asteval import Interpreter
+
+def get_timestamp(dt=None):
+    if dt:
+        return datetime.isoformat(dt)
+    else:
+        return datetime.isoformat(datetime.now())
+
+def log(level, message):
+    ts = get_timestamp()
+    output = f"[{level.upper()}] [vimcalc] [{ts}] : {message}"
+    print(output)
 
 def strings_to_ints(strings):
     return [int(i) for i in strings]
@@ -7,6 +19,7 @@ def strings_to_ints(strings):
 def get_selected_range():
     pos1 = strings_to_ints(vim.eval("getpos('v')"))
     pos2 = strings_to_ints(vim.eval("getpos('.')"))
+    log("debug", f"pos1 = {pos1}; pos1 = {pos2}")
     if pos1[1] >= pos2[1] and pos1[2] >= pos2[2]:
         return pos2, pos1
     else:
@@ -24,6 +37,9 @@ def get_text_from_range(start, stop):
         lines[0] = lines[0][start_column - 1:]
         lines[-1] = lines[-1][:stop_column]
         return "\n".join(lines)
+
+def preprocess_input(text):
+    return text.lstrip(" ").rstrip(" ") 
 
 def evaluate_expression(expr):
     aeval = Interpreter()
@@ -44,10 +60,17 @@ def replace_buffer_range(start, stop, replacement):
     vim.eval(f"nvim_buf_set_text({set_text_arg_string})")
     feedkeys = vim.eval("nvim_replace_termcodes('<esc>', v:true, v:false, v:true)")
     vim.eval(rf"nvim_feedkeys('{feedkeys}', 'x', v:false)")
-    print(feedkeys)
 
 def print_with_python():
     start, stop = get_selected_range()
     text = get_text_from_range(start, stop)
-    result = evaluate_expression(text)
-    replace_buffer_range(start, stop, f"{result:.4}")
+    log("debug", f"Selected text: {text}")
+    expr = preprocess_input(text)
+    log("debug", f"Preprocessed text: {expr}")
+    result = evaluate_expression(expr)
+    log("debug", f"Result: {result}")
+    if isinstance(result, float):
+        output = f"{result:.4}"
+    else:
+        output = result
+    replace_buffer_range(start, stop, output)
