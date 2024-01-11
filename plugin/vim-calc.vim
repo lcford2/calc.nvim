@@ -11,11 +11,11 @@ if exists("g:loaded_vimcalc")
 endif
 let g:loaded_vimcalc = 1
 
-" Defines a package path for Lua. This facilitates importing the
-" Lua modules from the plugin's dependency directory.
-let s:vimcalc_deps_loc =  expand("<sfile>:h:r") . "/../lua/vim-calc/deps"
-exe "lua package.path = package.path .. ';" . s:vimcalc_deps_loc . "/lua-?/init.lua'"
+if !has('python3')
+    echomsg ":python3 is not available, vimcalc will not be loaded"
+    finish
+endif
 
-" Exposes the plugin's functions for use as commands in Neovim.
-command! -nargs=0 CalcSelectedText lua require("vim-calc").CalcSelectedText()
+python3 import vimcalc.vimcalc
 
+command! Calculate python3 vimcalc.vimcalc.calculate()
