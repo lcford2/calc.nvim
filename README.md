@@ -1,4 +1,4 @@
-## vimcalc: A Calculator in Vim
+## calc.nvim: A Calculator in NeoVim
 
 Inspired by (vim-calc)[https://github.com/theniceboy/vim-calc].
 
@@ -7,11 +7,20 @@ expression evaluations and replaces the expression right in your buffer!
 
 
 #### Introduction
-`vimcalc` is a fully functional calculator that will replace expressions in your buffer
+`calc.nvim` is a fully functional calculator that will replace expressions in your buffer
 with their result!
 
 ![Demo](demo.gif)
 
+#### Installation
+
+Install `vimcalc` with [Lazy](https://github.com/folke/lazy.nvim):
+
+```lua
+require("lazy").setup({
+    "lcford2/calc.nvim"
+})
+```
 
 #### Usage
 
@@ -22,14 +31,6 @@ vim.keymap.set("v", "<C-c>", "<cmd>Calculate<cr>", {})
 ```
 
 Now, you can press `Control` and `c` to calculate!
-
-#### Installation
-Install `vimcalc` with [Lazy](https://github.com/folke/lazy.nvim):
-```lua
-require("lazy").setup({
-    "lcford2/vimcalc",
-})
-```
 
 #### License
 MIT
