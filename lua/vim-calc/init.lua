@@ -8,8 +8,7 @@ local M = {}
 
 -- Routes calls made to this module to functions in the
 -- plugin's other modules.
-M.GetSelectedText = vimcalc.GetSelectedText
-M.Calc = vimcalc.Calc
+M.calcSelectedText = vimcalc.calcSelectedText
 
 return M
 
