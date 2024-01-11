@@ -24,7 +24,8 @@ def log(level: str, message: str):
     """
     ts = get_timestamp()
     output = f"[{level.upper()}] [vimcalc] [{ts}] : {message}"
-    print(output)
+
+    # print(output)
 
 def strings_to_ints(strings: list[str]) -> list[int]:
     """Convert a list of strings to a list of integers
