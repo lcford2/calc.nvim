@@ -24,10 +24,16 @@ require("lazy").setup({
 
 #### Usage
 
-To bind to a key, add this to your `nvim` configuration:
+To bind to a key and set the float format of the expression,
+add this to your `nvim` configuration:
 
 ```lua
-vim.keymap.set("v", "<C-c>", "<cmd>Calculate<cr>", {})
+local calc = require("calc_nvim")
+
+calc.setup({
+  float_format="0.3",
+})
+vim.keymap.set("v", "<C-c>", calc.calculate, {})
 ```
 
 Now, you can press `Control` and `c` to calculate!
