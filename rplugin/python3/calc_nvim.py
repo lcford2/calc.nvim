@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pynvim
 from asteval import Interpreter
-from utils import LogLevel
+from .utils import LogLevel, strings_to_ints, get_timestamp
 
 
 @pynvim.plugin
@@ -15,7 +15,7 @@ class CalcNvim:
         self.__nvim = nvim
         self.__aeval = Interpreter()
         self.__float_format = "0.3f"
-        self.__init_time = self.__get_timestamp()
+        self.__init_time = get_timestamp()
         self.__log_level = LogLevel.FATAL
 
     @pynvim.function("CalcNvimSetup")
@@ -43,19 +43,6 @@ class CalcNvim:
         else:
             self.__log(LogLevel.ERROR, "Invalid configuration.")
 
-    def __get_timestamp(self, dt=None):
-        """Get the isoformatted timestamp.
-
-        If dt is not provided, will return the current time.
-
-        Args:
-            dt (datetime, optional): A datetime to convert to isoformat
-        """
-        if dt:
-            return datetime.isoformat(dt)
-        else:
-            return datetime.isoformat(datetime.now())
-
     def __log(self, level: LogLevel, message: str):
         """Log a message to neovim.
 
@@ -63,7 +50,7 @@ class CalcNvim:
             level (LogLevel): Level to log message
             message (str): Message to log
         """
-        ts = self.__get_timestamp()
+        ts = get_timestamp()
         output = f"[{level.name}] [{self.NAME}] [{ts}]: {message}\n"
 
         with open(f"/tmp/{self.NAME}.log", "a") as f:
@@ -75,18 +62,6 @@ class CalcNvim:
             else:
                 self.__nvim.out_write(output)
 
-    @staticmethod
-    def __strings_to_ints(strings: list[str]) -> list[int]:
-        """Convert a list of strings to a list of integers.
-
-        Args:
-            strings (list[str]): List of strings that can be converted to integers
-
-        Returns:
-            list[int]: List of integers from the strings provided
-        """
-        return [int(i) for i in strings]
-
     def get_selected_range(self) -> tuple[list[int], list[int]]:
         """Get the currenly selected range from the buffer.
 
@@ -94,8 +69,8 @@ class CalcNvim:
             tuple[list[int], list[int]]: The first position and second position of the
                 selected range
         """
-        pos1 = self.__strings_to_ints(self.__nvim.funcs.getpos("v"))
-        pos2 = self.__strings_to_ints(self.__nvim.funcs.getpos("."))
+        pos1 = strings_to_ints(self.__nvim.funcs.getpos("v"))
+        pos2 = strings_to_ints(self.__nvim.funcs.getpos("."))
         self.__log(LogLevel.DEBUG, f"pos1 = {pos1}; pos2 = {pos2}")
         # when in visual line mode, pos1 and pos2 should be equal
         if pos1 == pos2:
