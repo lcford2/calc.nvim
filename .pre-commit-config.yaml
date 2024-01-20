@@ -1,14 +1,19 @@
----
 repos:
-
-- repo: https://github.com/charliermarsh/ruff-pre-commit.git
-  rev: v0.1.7
-  hooks:
-  - id: ruff
-    args: [--fix]
+- hooks:
+  - args:
+    - --fix
+    id: ruff
   - id: ruff-format
-
-- repo: https://github.com/Koihik/LuaFormatter.git
-  rev: 29afe10
-  hooks:
+  repo: https://github.com/charliermarsh/ruff-pre-commit.git
+  rev: v0.1.7
+- hooks:
   - id: luaformatter
+  repo: https://github.com/Koihik/LuaFormatter.git
+  rev: 29afe10
+- hooks:
+  - id: commitizen
+  - id: commitizen-branch
+    stages:
+    - push
+  repo: https://github.com/commitizen-tools/commitizen
+  rev: v3.13.0
