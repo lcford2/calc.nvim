@@ -216,7 +216,9 @@ class CalcNvim:
         """
         # this function exists to make it easy to add more preprocessing
         # logic in the future
-        return text.lstrip(" ").rstrip(" ")
+        pp_text = text.lstrip(" ").rstrip(" ")
+        pp_text = text.replace(",", "_")
+        return pp_text
 
     def evaluate_expression(self, expr: str) -> float | str:
         """Use asteval to evaluate the math expression.
