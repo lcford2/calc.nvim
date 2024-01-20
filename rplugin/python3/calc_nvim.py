@@ -239,7 +239,9 @@ class CalcNvim:
             value = expr
         return value
 
-    def replace_buffer_range(self, start: list[int], stop: list[int], replacement: str):
+    def __replace_buffer_range(
+        self, start: list[int], stop: list[int], replacement: str
+    ):
         """Replace text in a buffer.
 
         Args:
@@ -257,18 +259,16 @@ class CalcNvim:
         self.__nvim.api.buf_set_text(
             s_buf, s_row - 1, s_col - 1, s_row - 1, s_col - 1, [replacement]
         )
+        self.__exit_mode()
+
+    def __exit_mode(self):
         # feed the escape key to exit visual mode and return to normal mode
         self.__nvim.api.feedkeys(
             self.__nvim.api.replace_termcodes("<esc>", True, False, True), "x", False
         )
 
-    @pynvim.function("CalcNvimCalculate")
-    def calculate(self, args):
-        """Entrypoint to the plugin.
-
-        Will extract the text from the currently selected range,
-        evaluate it, and then replace the currently selected range with the result.
-        """
+    def __extract_text_from_buffer(self):
+        """Extract selected text from a buffer."""
         start, stop = self.get_selected_range()
         if not start or not start:
             self.__log(LogLevel.INFO, "Exiting due to error in getting selected range.")
@@ -279,7 +279,21 @@ class CalcNvim:
             self.__log(
                 LogLevel.INFO, "Exiting due to error in getting text at selected range."
             )
+            return
+        return text, start, stop
 
+    @pynvim.function("CalcNvimCalculate")
+    def calculate(self, args):
+        """Entrypoint to the plugin.
+
+        Will extract the text from the currently selected range,
+        evaluate it, and then replace the currently selected range with the result.
+        """
+        extract_result = self.__extract_text_from_buffer()
+        if extract_result:
+            text, start, stop = extract_result
+        else:
+            return
         expr = self.__preprocess_input(text)
         result = self.evaluate_expression(expr)
         self.__log(LogLevel.DEBUG, f"Result: {result}")
@@ -290,11 +304,35 @@ class CalcNvim:
                 "Not replacing text, expression evaluation results in "
                 "original expression",
             )
+            self.__exit_mode()
             return
 
         if isinstance(result, float):
             output = "{:{}}".format(result, self.__float_format)
+            self.__replace_buffer_range(start, stop, output)
         else:
             output = result
+            self.__exit_mode()
 
-        self.replace_buffer_range(start, stop, output)
+    @pynvim.function("CalcNvimFormatNumber")
+    def format_number(self, args):
+        """Extract a number from the buffer and format it with user specified format.
+
+        If formatting fails, the text is not replaced.
+        """
+        extract_result = self.__extract_text_from_buffer()
+        if extract_result:
+            text, start, stop = extract_result
+            self.__log(LogLevel.DEBUG, f"[FORMAT NUMBER] {text}, {start}, {stop}")
+        else:
+            self.__log(LogLevel.ERROR, "[FORMAT NUMBER] Failed to extract number")
+            return
+        pp_text = self.__preprocess_input(text)
+        try:
+            output = "{:{}}".format(float(pp_text), self.__float_format)
+            self.__log(LogLevel.DEBUG, f"[FORMAT NUMBER] {output}")
+            self.__replace_buffer_range(start, stop, output)
+        except Exception:
+            output = text
+            self.__log(LogLevel.ERROR, "[FORMAT NUMBER] Failed to format number")
+            self.__exit_mode()

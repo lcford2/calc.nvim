@@ -10,4 +10,9 @@ M.calculate = function(...)
     vim.api.nvim_call_function("CalcNvimCalculate", {...})
 end
 
+M.format_number = function(...)
+    -- call the format function from python plugin
+    vim.api.nvim_call_function("CalcNvimFormatNumber", {...})
+end
+
 return M
