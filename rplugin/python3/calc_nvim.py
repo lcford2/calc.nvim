@@ -139,7 +139,7 @@ class CalcNvim:
             else:
                 self.__nvim.out_write(output)
 
-    def get_selected_range(self) -> tuple[list[int], list[int]]:
+    def __get_selected_range(self) -> tuple[list[int], list[int]]:
         """Get the currenly selected range from the buffer.
 
         Returns:
@@ -179,7 +179,7 @@ class CalcNvim:
             # in visual mode
             return pos1, pos2
 
-    def get_text_from_range(self, start: list[int], stop: list[int]) -> str:
+    def __get_text_from_range(self, start: list[int], stop: list[int]) -> str:
         """Extract the text from a buffer given a start and stop position.
 
         Args:
@@ -220,7 +220,7 @@ class CalcNvim:
         pp_text = text.replace(",", "_")
         return pp_text
 
-    def evaluate_expression(self, expr: str) -> float | str:
+    def __evaluate_expression(self, expr: str) -> float | str:
         """Use asteval to evaluate the math expression.
 
         Args:
@@ -269,12 +269,12 @@ class CalcNvim:
 
     def __extract_text_from_buffer(self):
         """Extract selected text from a buffer."""
-        start, stop = self.get_selected_range()
+        start, stop = self.__get_selected_range()
         if not start or not start:
             self.__log(LogLevel.INFO, "Exiting due to error in getting selected range.")
             return
 
-        text = self.get_text_from_range(start, stop)
+        text = self.__get_text_from_range(start, stop)
         if not text:
             self.__log(
                 LogLevel.INFO, "Exiting due to error in getting text at selected range."
@@ -295,7 +295,7 @@ class CalcNvim:
         else:
             return
         expr = self.__preprocess_input(text)
-        result = self.evaluate_expression(expr)
+        result = self.__evaluate_expression(expr)
         self.__log(LogLevel.DEBUG, f"Result: {result}")
 
         if result == expr:
@@ -315,7 +315,7 @@ class CalcNvim:
             self.__exit_mode()
 
     @pynvim.function("CalcNvimFormatNumber")
-    def format_number(self, args):
+    def format_number(self, float_format):
         """Extract a number from the buffer and format it with user specified format.
 
         If formatting fails, the text is not replaced.
@@ -328,11 +328,29 @@ class CalcNvim:
             self.__log(LogLevel.ERROR, "[FORMAT NUMBER] Failed to extract number")
             return
         pp_text = self.__preprocess_input(text)
+
+        if not float_format:
+            float_format = self.__float_format
+
+        self.__log(LogLevel.DEBUG, f"[FORMAT NUMBER] Float Format: {float_format}")
+
         try:
-            output = "{:{}}".format(float(pp_text), self.__float_format)
+            output = "{:{}}".format(float(pp_text), float_format)
             self.__log(LogLevel.DEBUG, f"[FORMAT NUMBER] {output}")
             self.__replace_buffer_range(start, stop, output)
         except Exception:
             output = text
             self.__log(LogLevel.ERROR, "[FORMAT NUMBER] Failed to format number")
             self.__exit_mode()
+
+    @pynvim.function("CalcNvimSetFormat")
+    def set_format(self, float_format: list[str]):
+        """Set the float_format of the calculator.
+
+        Args:
+            float_format (list[str]): Should be a list of length 1, where the first
+                element is the desired float format. This is exposed via
+                lua/calc_nvim.lua.
+        """
+        if len(float_format) > 0:
+            self.__float_format = float_format[0]
