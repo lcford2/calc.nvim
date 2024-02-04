@@ -25,7 +25,15 @@ Some plugin managers will attempt to install these packages using `pip` when `ca
 
 Additionally, to take full advantage of the capabilities of `asteval`, the `numpy` and `numpy_financial` packages can be installed with `pip` as well.
 
+To install all of these dependencies to your Python3 environment, you can use the following command:
+
+```shell
+pip install pynvim asteval numpy numpy_financial
+```
+
 ## Installation
+
+Ensure the above dependencies are installed, then install `calc.nvim` using your preferred package manager.
 
 Install `vimcalc` with [Lazy](https://github.com/folke/lazy.nvim):
 
@@ -34,6 +42,9 @@ require("lazy").setup({
     "lcford2/calc.nvim"
 })
 ```
+
+On first launch after installation, an error indicating that the plugin cannot be found will likely be shown.
+To resolve this error, run `:UpdateRemotePlugins` then quit and reopen neovim.
 
 ## Usage
 
