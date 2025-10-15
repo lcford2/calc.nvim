@@ -64,12 +64,7 @@ if not install_success then
 end
 
 print("Python dependencies installed successfully!")
-
--- Automatically run UpdateRemotePlugins
-print("\nRunning :UpdateRemotePlugins...")
-vim.cmd("UpdateRemotePlugins")
-
-print("\nInstallation complete!")
 print("\nNext steps:")
-print("1. Restart Neovim")
-print("2. Run :checkhealth calc_nvim to verify installation")
+print("1. Run :UpdateRemotePlugins")
+print("2. Restart Neovim")
+print("3. Run :checkhealth calc_nvim to verify installation")
