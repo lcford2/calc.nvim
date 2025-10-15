@@ -1,6 +1,6 @@
 [project]
 name = "calc.nvim"
-version = "0.2.0"
+version = "0.3.0"
 
 [tool.black]
 include = '\.pyi?$'
