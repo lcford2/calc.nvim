@@ -1,4 +1,4 @@
-A plugin to evaluate mathematical expressions selected in visual mode and replace them 
+A plugin to evaluate mathematical expressions selected in visual mode and replace them
 with the result.
 
 Examples:
@@ -8,5 +8,3 @@ sin(1) * 10 -> 8.415
 abs(-5) + 4 -> 9.0
 sqrt(4) / 3 -> 0.6667
 32,000 / 4 -> 8000.0
-npv(0.04, [0, 100, 110, 120]) -> npv(0.04, [0, 100, 110, 120])  
-irr([-1000, 30, 100, 400, 500, 500]) -> irr([-1000, 30, 100, 400, 500, 500])
