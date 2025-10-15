@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from enum import Enum
 
@@ -205,6 +206,30 @@ class CalcNvim:
         self.__log(LogLevel.DEBUG, f"Selected text: {output}")
         return output
 
+    @staticmethod
+    def __handle_commas_in_numbers(text: str) -> str:
+        """Use regex to replace commas in numbers.
+
+        Searches for commas surrounded by digits and replaces the
+        commas with underscores.
+
+        e.g.:
+            10,000 -> 10_000
+            100,000,000 -> 100_000_000
+            [1,2,3,4] -> [1_2_3_4] (BAD, TODO)
+
+        Args:
+            text (str): Input text from buffer
+
+        Returns:
+            str: Text where commas in numbers are replaced by underscores
+        """
+        while match := re.search(r"(\d),(\d)", text):
+            replace_text = "_".join(match.groups())
+            span = match.span()
+            text = text[: span[0]] + replace_text + text[span[1] :]
+        return text
+
     def __preprocess_input(self, text: str) -> str:
         """Preprocess the text from the buffer before evaluation.
 
@@ -217,7 +242,8 @@ class CalcNvim:
         # this function exists to make it easy to add more preprocessing
         # logic in the future
         pp_text = text.lstrip(" ").rstrip(" ")
-        pp_text = text.replace(",", "_")
+        # pp_text = text.replace(",", "_")
+        pp_text = self.__handle_commas_in_numbers(pp_text)
         return pp_text
 
     def __evaluate_expression(self, expr: str) -> float | str:

@@ -2,7 +2,7 @@
 
 Inspired by [vim-calc](https://github.com/theniceboy/vim-calc).
 
-Uses [asteval](https://newville.github.io/asteval/) to perform *safe-ish* 
+Uses [asteval](https://newville.github.io/asteval/) to perform *safe-ish*
 expression evaluations and replaces the expression right in your buffer!
 
 
@@ -33,18 +33,45 @@ pip install pynvim asteval numpy numpy_financial
 
 ## Installation
 
-Ensure the above dependencies are installed, then install `calc.nvim` using your preferred package manager.
+### Automatic Installation with Lazy.nvim (Recommended)
 
-Install `vimcalc` with [Lazy](https://github.com/folke/lazy.nvim):
+Install `calc.nvim` with [Lazy](https://github.com/folke/lazy.nvim), which will automatically handle Python dependencies:
 
 ```lua
 require("lazy").setup({
-    "lcford2/calc.nvim"
+    {
+        "lcford2/calc.nvim",
+        build = ":lua require('build')",
+    }
 })
 ```
 
-On first launch after installation, an error indicating that the plugin cannot be found will likely be shown.
-To resolve this error, run `:UpdateRemotePlugins` then quit and reopen neovim.
+When you install the plugin, Lazy.nvim will:
+1. Create a dedicated Python virtual environment
+2. Install `pynvim` and `asteval` packages automatically
+3. Run `:UpdateRemotePlugins` to register the Python plugin
+
+After installation:
+1. Restart Neovim
+2. Run `:checkhealth calc_nvim` to verify everything is working
+
+### Manual Installation
+
+If you prefer to manage Python dependencies yourself:
+
+1. Install the required Python packages:
+   ```shell
+   pip install pynvim asteval
+   ```
+
+2. Install the plugin with your package manager:
+   ```lua
+   require("lazy").setup({
+       "lcford2/calc.nvim"
+   })
+   ```
+
+3. Run `:UpdateRemotePlugins` and restart Neovim
 
 ## Usage
 
