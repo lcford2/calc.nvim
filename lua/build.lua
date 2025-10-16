@@ -13,7 +13,6 @@ end
 
 -- Determine the virtual environment path
 local venv_path = vim.fn.stdpath("data") .. "/calc-nvim-venv"
-local python_executable = venv_path .. "/bin/python"
 local pip_executable = venv_path .. "/bin/pip"
 
 -- Check if Python 3 is available

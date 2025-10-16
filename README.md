@@ -51,9 +51,19 @@ When you install the plugin, Lazy.nvim will:
 2. Install `pynvim` and `asteval` packages automatically
 
 After installation:
-1. Restart Neovim
-2. Run `:UpdateRemotePlugins` to register the Python plugin
-3. Run `:checkhealth calc_nvim` to verify everything is working
+1. Run `:UpdateRemotePlugins` to register the Python plugin
+2. Restart Neovim
+3. Run `:checkhealth calc.nvim` to verify everything is working
+
+The health check will verify:
+- Virtual environment setup
+- Python executable and required packages
+- Remote plugin registration status
+- Python host configuration
+
+> [!TIP]
+> If you have issues with the install, try running `:Lazy sync` and then `:Lazy build calc.nvim`.
+> Follow those commands with the *After installation* section above.
 
 ### Manual Installation
 
@@ -83,6 +93,7 @@ local calc = require("calc_nvim")
 
 calc.setup({
   float_format="0.3",
+  log_level="info"
 })
 vim.keymap.set("v", "<C-c>", calc.calculate, {})
 ```
